@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Style Transfer</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+    <header class="mb-auto">
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <a class="navbar-brand" href="http://localhost:3000/">Logo</a>
+      </nav>
+    </header>
+
+    <div class="cover-containerd-flex w-100 h-100 p-3 mx-auto flex-column text-center">
+        <!-- Preloader with Bootstrap Progress Bar -->
+        <img class="cover-image figure-image" src="resources/logo_gray.png"/>
+
+          <p class="lead text-muted">Something short and leading about the collection below—its content</p>
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%">75%</div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var progress = setInterval(function () {
+            var $bar = $("#bar");
+
+            if ($bar.width() >= 600) {
+                clearInterval(progress);
+            } else {
+                $bar.width($bar.width() + 60);
+            }
+            $bar.text($bar.width() / 6 + "%");
+            if ($bar.width() / 6 == 100){
+              $bar.text("Still working ... " + $bar.width() / 6 + "%");
+            }
+        }, 800);
+
+        $(window).load(function() {
+          $("#bar").width(600);
+          $(".loader").fadeOut(3000);
+        });
+    </script>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<!--    <script src="dist/jquery/jquery.min.js"></script>-->
+    <script src="dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

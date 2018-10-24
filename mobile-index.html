@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="">
+
+    <title>Style Transfer-Image Upload page</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="app/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+  </head>
+
+  <body>
+
+      <div class="container text-center my-3" style="height: 500px;">
+          <a href="#" class="text-secondary">
+          <div class="rounded border p-4" style="background-color: #efefef;">
+              <img class="rounded mx-auto d-block" src="app/resources/ic_album.png" >
+              <h2>사진을 등록해주세요.</h2>
+            </div>
+            </a>
+      </div>
+      <script type="text/javascript">
+        $("a").click(function() {
+            // creating input on-the-fly
+            var input = $(document.createElement("input"));
+            input.attr("type", "file");
+            input.attr("accept", "image/*");
+            // add onchange handler if you wish to get the file :)
+            input.trigger("click"); // opening dialog
+            return false; // avoiding navigation
+        });
+      </script>
+  </body>
+</html>

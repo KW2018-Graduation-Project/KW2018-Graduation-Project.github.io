@@ -12,6 +12,7 @@ var content = require('./routes/content');
 var mask = require('./routes/mask');
 var guide = require('./routes/guide');
 var result = require('./routes/result');
+var progress = require('/routes/progress');
 
 
 var app = express();
@@ -36,6 +37,7 @@ app.use('/content', content);
 app.use('/guide', guide);
 app.use('/mask', mask);
 app.use('/result', result);
+app.use('/progress', progress);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

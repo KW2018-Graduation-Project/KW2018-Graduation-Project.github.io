@@ -5,12 +5,12 @@ var fs = require('fs');
 /* GET home page. */
 /*
 router.get('/', function(req, res, next) {
-  res.render('result', { title: 'Result' });
+  res.render('mask', { title: 'mask' });
 });
 */
 
 router.get('/', function(req, res, next) {	
-  fs.readFile('result.html', function(error, data) {
+  fs.readFile('progress.html', function(error, data) {
 		if(error) {
 			console.log(error);
 		} else {
@@ -19,5 +19,6 @@ router.get('/', function(req, res, next) {
 		}
 	});
 });
+
 
 module.exports = router;
