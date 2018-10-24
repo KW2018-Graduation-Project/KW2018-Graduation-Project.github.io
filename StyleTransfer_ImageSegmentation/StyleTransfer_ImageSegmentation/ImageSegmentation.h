@@ -8,6 +8,10 @@ using namespace std;
 using namespace cv;
 
 #define MAXPIXEL 256
+#define UNKNOWN 128
+#define BLACK 0
+#define WHITE 255
+
 
 class PixelNode {
 private:
@@ -24,14 +28,15 @@ public:
 extern int height, width;
 extern Mat procImg;
 
+bool isBoundary(int x, int y);
+
 void pre_processing(Mat inputImg);
 void edgeDetection(Mat&, Mat&);
+void imageCombine(Mat& showImg, Mat& outputImg);
 
-void expand_seleced(Mat& outImg, vector<PixelNode>& frontier, int x, int y, int color, int new_color);
-void expand_otherwise(Mat& outImg, vector<PixelNode>& frontier, int x, int y, int color, int new_color);
-void FloodFill8(Mat& outImg, int x, int y, int new_color);
-Mat watershed(Mat& selectImg);
-uchar GetNeighborPixel(Mat &outputImg, int x, int y);
+void expand_seleced(Mat& outImg, vector<PixelNode>& frontier, int x, int y, uchar new_label);
+void expand_otherwise(Mat& outImg, vector<PixelNode>& frontier, int x, int y, int pixel, uchar new_label);
+void watershed(Mat& selectImg, Mat& outputImg);
 
 
 

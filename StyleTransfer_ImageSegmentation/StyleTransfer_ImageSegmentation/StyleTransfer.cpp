@@ -68,27 +68,29 @@ output.at<Vec3b>(x, y)[2] = colors[comp].b;
 return output;
 }*/
 
-Mat inputImg, outputImg, selectImg;
+Mat inputImg, outputImg, showImg, selectImg;
 bool clicked;
 int prevX, prevY;
-
+uchar flag;
 void mouseCallback(int event, int x, int y, int flags, void* param);
 
 int main(int argc, char **argv) {
+	flag = WHITE;
 	const char* filename = "cat.jpg";
 	inputImg = imread(filename, IMREAD_COLOR);
 
-	selectImg = Mat(inputImg.rows, inputImg.cols, CV_8UC3, Scalar(255, 255, 255));
-	outputImg = Mat(inputImg.rows, inputImg.cols, CV_8UC3, Scalar(0, 0, 0));
+	inputImg.copyTo(showImg);
+	selectImg = Mat(inputImg.rows, inputImg.cols, CV_8UC1, Scalar(UNKNOWN));
+	outputImg = Mat(inputImg.rows, inputImg.cols, CV_8UC1, Scalar(UNKNOWN));
+
 
 	pre_processing(inputImg);
 
-	imshow("input Image", inputImg);
-	//imshow("selected Image", selectImg);
-	imshow("output Image", outputImg);
+	imshow("Show Image", showImg);
+	imshow("selected Image", selectImg);
 
 	clicked = false;
-	setMouseCallback("input Image", mouseCallback);
+	setMouseCallback("Show Image", mouseCallback);
 
 	waitKey(0);
 	return 0;
@@ -98,22 +100,36 @@ void mouseCallback(int event, int curX, int curY, int flags, void* param) {
 	switch (event) {
 	case CV_EVENT_MOUSEMOVE:
 		if (!clicked) return;
-		line(inputImg, Point(prevX, prevY), Point(curX, curY), Scalar(0, 0, 255), 2);
-		line(selectImg, Point(prevX, prevY), Point(curX, curY), Scalar(0, 0, 0), 2);
+		
+		line(showImg, Point(prevX, prevY), Point(curX, curY), Scalar(0, 0, 255), 2);
+		line(selectImg, Point(prevX, prevY), Point(curX, curY), Scalar(flag), 2);
+		
 		prevX = curX;
 		prevY = curY;
-		imshow("input Image", inputImg);
-		//imshow("selected Image", selectImg);
+
+		imshow("Show Image", showImg);
+		imshow("selected Image", selectImg);
 		break;
 	case CV_EVENT_LBUTTONDOWN:
+		clicked = true;
+
 		prevX = curX;
 		prevY = curY;
-		clicked = true;
 		break;
 	case CV_EVENT_LBUTTONUP:
 		clicked = false;
-		outputImg = watershed(selectImg);
-		imshow("output Image", outputImg);
+
+		outputImg = Mat(height, width, CV_8UC1, Scalar(UNKNOWN));
+		watershed(selectImg, outputImg);
+
+		inputImg.copyTo(showImg);
+		imageCombine(showImg, outputImg);
+		imshow("Show Image", showImg);
+
+		int fff;
+		cin >> fff;
+		if (fff == 0) flag = BLACK;
+		else if(fff==1) flag = WHITE;
 		break;
 	}
 }

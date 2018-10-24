@@ -10,8 +10,6 @@ void pre_processing(Mat inputImg) {
 	width = inputImg.cols;
 
 	procImg = imread("edge.jpg", IMREAD_GRAYSCALE);
-
-
 	//EdgeDetection();
 }
 
@@ -23,6 +21,22 @@ void edgeDetection(Mat &input, Mat &output) {
 	Sobel(BlurImage, sobelX, CV_8U, 1, 0);
 	Sobel(BlurImage, sobelY, CV_8U, 0, 1);
 	addWeighted(sobelX, 0.5, sobelY, 0.5, 0, output);
+}
+
+void imageCombine(Mat& showImg, Mat& outputImg) {
+	for (int h = 0; h < height; h++) {
+		for (int w = 0; w < width; w++) {
+			if (outputImg.at<uchar>(h, w) == BLACK) {
+				int colorB = (showImg.at<Vec3b>(h, w)[0] - 100 < 0) ? 0 : showImg.at<Vec3b>(h, w)[0] - 100;
+				int colorG = (showImg.at<Vec3b>(h, w)[1] - 100 < 0) ? 0 : showImg.at<Vec3b>(h, w)[1] - 100;
+				int colorR = (showImg.at<Vec3b>(h, w)[2] - 100 < 0) ? 0 : showImg.at<Vec3b>(h, w)[2] - 100;
+				
+				showImg.at<Vec3b>(h, w)[0] = colorB;
+				showImg.at<Vec3b>(h, w)[1] = colorG;
+				showImg.at<Vec3b>(h, w)[2] = colorR;
+			}
+		}
+	}
 }
 
 /*void canvasSetting() {

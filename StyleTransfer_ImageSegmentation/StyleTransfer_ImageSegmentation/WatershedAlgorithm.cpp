@@ -2,105 +2,115 @@
 
 #include "ImageSegmentation.h"
 
-void expand_seleced(Mat& outImg, vector<PixelNode>& frontier, int x, int y, int color, int new_color) {
-	int pixel_proc = procImg.at<uchar>(x, y);
-	int pixel_out = outImg.at<uchar>(x, y);
-	if (pixel_proc == color && pixel_out != new_color) {
-		frontier.push_back(PixelNode(x, y));
-		outImg.at<uchar>(x, y) = new_color;
+#define DIR 4
+
+int dir_x[8] = { -1, 1, 0, 0, -1, -1, 1, 1 };
+int dir_y[8] = { 0, 0, -1, 1, -1, -1, -1,1 };
+
+bool isBoundary(int x, int y) {
+	if (x < 0) return false;
+	if (y < 0) return false;
+	if (x > height-1) return false;
+	if (y > width-1) return false;
+	return true;
+}
+
+void expand_seleced(Mat& outImg, vector<PixelNode>& frontier, int x, int y, uchar new_label) {
+	int pixel = procImg.at<uchar>(x, y);
+
+	for (int i = 0; i < DIR; i++) {
+		int nx = x + dir_x[i];
+		int ny = y + dir_y[i];
+
+		if (!isBoundary(x, y)) return;
+
+		if (pixel == new_label && outImg.at<uchar>(x, y) != new_label) {
+			outImg.at<uchar>(x, y) = new_label;
+			frontier.push_back(PixelNode(x, y));
+		}
 	}
 }
 
-void expand_otherwise(Mat& outImg, vector<PixelNode>& frontier, int x, int y, int color, int new_color) {
-	
-}
+void expand_otherwise(Mat& outImg, vector<PixelNode>& frontier, int x, int y, int pixel, uchar new_label) {
+	for (int i = 0; i < DIR; i++) {
+		int nx = x + dir_x[i];
+		int ny = y + dir_y[i];
 
-void FloodFill8(Mat& outImg, int x, int y, int new_color) {
-	if (x < 0 || y < 0 || x >= width || y >= height) { cout << "Out of bounds" << endl; return; }
+		if (!isBoundary(nx, ny)) continue;
 
-	vector<PixelNode> frontier;
-	int w = width - 1;
-	int h = height - 1;
+		int ssss = procImg.at<uchar> (nx, ny);
 
-	//if (new_color == (*out)(x,y))  return;
-	int proc_color = procImg.at<uchar>(x, y);
-	frontier.push_back(PixelNode(x, y));
-	outImg.at<uchar>(x, y) = new_color;
+		if (procImg.at<uchar>(nx, ny) <= pixel && outImg.at<uchar>(nx, ny) == UNKNOWN) {
 
-	while (!frontier.empty())
-	{
-		PixelNode node = frontier.back();
-		frontier.pop_back();
+			//cout << (int)procImg.at<uchar>(nx, ny) << endl;
 
-		if (node.getX() > 0)  expand_seleced(outImg, frontier, x - 1, y, proc_color, new_color);
-		if (node.getX() < w)  expand_seleced(outImg, frontier, x + 1, y, proc_color, new_color);
-		if (node.getY() > 0)  expand_seleced(outImg, frontier, x, y - 1, proc_color, new_color);
-		if (node.getY() < h)  expand_seleced(outImg, frontier, x, y + 1, proc_color, new_color);
-
-		if (node.getX() > 0 && p.getY() > 0)  expand_seleced(outImg, frontier, x - 1, y - 1, proc_color, new_color);
-		if (node.getX() > 0 && p.getY() < h)  expand_seleced(outImg, frontier, x + 1, y + 1, proc_color, new_color);
-		if (node.getX() < w && p.getY() > 0)  expand_seleced(outImg, frontier, x + 1, y - 1, proc_color, new_color);
-		if (node.getX() < w && p.getY() < h)  expand_seleced(outImg, frontier, x + 1, y + 1, proc_color, new_color);
+			outImg.at<uchar>(nx, ny) = new_label;
+			frontier.push_back(PixelNode(nx, ny));
+		}
 	}
 }
 
-Mat watershed(Mat &selectImg) {
-	Mat outImg = Mat(height, width, CV_8UC3, -1);
-
-	int next_label = 0;
-
+void watershed(Mat& selectImg, Mat& outImg) {
 	vector<vector<PixelNode> > pixels(MAXPIXEL);
 	for (int h = 0; h < height; h++) {
 		for (int w = 0; w < width; w++) {
-			if (selectImg.at<uchar>(h, w) == 0)
-				pixels[0].push_back(PixelNode(h, w));
-			else
-				pixels[procImg.at<uchar>(h, w)].push_back(PixelNode(h, w));
+			uchar sel_pix = selectImg.at<uchar>(h, w);
+			if (sel_pix == BLACK)		pixels[BLACK].push_back(PixelNode(h, w));
+			else if (sel_pix == WHITE)	pixels[WHITE].push_back(PixelNode(h, w));
+			else		pixels[procImg.at<uchar>(h, w)].push_back(PixelNode(h, w));
 		}
 	}
 
-	int size = pixels[0].size();
-	for (int i = 0; i<size; i++)
-	{
-		PixelNode node = pixels[0][i];
-		if (outImg.at<uchar>(node.getX(), node.getY()) < 0)
-		{
-			FloodFill8(outImg, node.getX(), node.getY(), next_label++);
-		}
-	}
+	vector<PixelNode> frontier;
+	outImg.at<uchar>(0, 0) = BLACK;
+	frontier.push_back(PixelNode(0, 0));
 
-	for (int p = 1; p < MAXPIXEL; p++) {
-		vector<PixelNode> frontier;
-
-		int size = pixels[p].size();
-		for (int i = 0; i < size; i++) {
-			PixelNode node = pixels[p][i];
-			int neighbor_pix = GetNeighborPixel(outImg, node.getX(), node.getY());
-
-			//cout << neighbor_pix << endl;
-
-			outImg.at<uchar>(node.getX(), node.getY()) = neighbor_pix;
+	int size = pixels[BLACK].size();
+	for (int i = 0; i<size; i++) {
+		PixelNode node = pixels[BLACK][i];
+		if (outImg.at<uchar>(node.getX(), node.getY()) == UNKNOWN) {
+			outImg.at<uchar>(node.getX(), node.getY()) = BLACK;
 			frontier.push_back(node);
+			expand_seleced(outImg, frontier, node.getX(), node.getY(), BLACK);
 		}
-
-
-
-
-
 	}
 
+	size = pixels[WHITE].size();
+	for (int i = 0; i<size; i++) {
+		PixelNode node = pixels[WHITE][i];
+		if (outImg.at<uchar>(node.getX(), node.getY()) == UNKNOWN) {
+			outImg.at<uchar>(node.getX(), node.getY()) = WHITE;
+			frontier.push_back(node);
+			expand_seleced(outImg, frontier, node.getX(), node.getY(), WHITE);
+		}
+	}
 
+	for (int pix = 1; pix < MAXPIXEL; pix++) {
 
-	return outImg;
-}
+		int size = pixels[pix].size();
+		for (int i = 0; i < size; i++) {
+			PixelNode node = pixels[pix][i];
 
-uchar GetNeighborPixel(Mat &outputImg, int x, int y) {
-	uchar pixel = 0;
+			for (int j = 0; j < DIR; j++) {
+				int nx = node.getX() + dir_x[j];
+				int ny = node.getY() + dir_y[j];
 
-	if (x > 0) { pixel = outputImg.at<uchar>(x - 1, y); return pixel; }
-	if (x < width) { pixel = outputImg.at<uchar>(x + 1, y); return pixel; }
-	if (y > 0) { pixel = outputImg.at<uchar>(x, y - 1); return pixel; }
-	if (y < height) { pixel = outputImg.at<uchar>(x, y - 1); return pixel; }
+				if (!isBoundary(nx, ny)) continue;
 
-	return pixel;
+				int neighbor_label = outImg.at<uchar>(nx, ny);
+				if (neighbor_label != UNKNOWN) {
+					outImg.at<uchar>(node.getX(), node.getY()) = neighbor_label;
+					frontier.push_back(node);
+				}
+			}
+		}
+
+		while (!frontier.empty()) {
+			PixelNode node = frontier.back();
+			frontier.pop_back();
+
+			int label = outImg.at<uchar>(node.getX(), node.getY());
+			expand_otherwise(outImg, frontier, node.getX(), node.getY(), pix, label);
+		}
+	}
 }
