@@ -121,20 +121,26 @@ body {
 #image-div{
     width: 600px;
     height: 400px;
+}
+#drop-area{
+    height: 400px;
+}
+#back-area{
+    position: absolute;
+    z-index: -1;
+    top: 120px;
+    width: 600px;
+    height: 400px;
     border: 1px solid #e0e0e0;
     background-color: #efefef;
     border-radius: 5px;
-}
-#style-image{
-    height: 400px;
-    max-height: 400px;
 }
 .card{
     margin: 10px;
     width: 140px;
     height: 140px;
 }
-.card img{
+.card-img{
     height: inherit;
     min-width: 140px;
 }

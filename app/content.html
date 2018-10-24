@@ -28,7 +28,7 @@
                 <div class="sidebar-nav px-3">
                     <br>
                     <div class="card shadow-sm">
-                        <img class="card-img" draggable="true" ondragstart="drag(event)" src="resources/images/lena_gray.jpg" id="list-img"/>
+                        <img class="card-img" src="resources/images/lena_gray.jpg"/>
                     </div>
                     <div class="card shadow-sm">
                         <img class="card-img" src="resources/images/Penguins.jpg"/>
@@ -67,9 +67,10 @@
               <p class="lead text-muted">Something short and leading about the collection below—its content</p>
 
                 <div class="m-auto" id="image-div">
-                    <div id="image-area" ondrop="drop(event)" ondragover="allowDrop(event)">
-                        <span>drop here</span>
-<!--                        <img class="p-2" id="style-image" />-->
+                    <div id="drop-area">
+                    </div>
+                    <div id="back-area">
+                        <img class="p-2" id="style-image" />
                     </div>
                 </div>
               <p>
@@ -84,29 +85,55 @@
 
     <!-- Menu Toggle Script -->
     <script type="text/javascript">
-        function allowDrop(ev) {
-            ev.preventDefault();
-        }
-
-        function drag(ev) {
-            ev.dataTransfer.setData("text", ev.target.id);
-        }
-
-        function drop(ev) {
-            ev.preventDefault();
-            var data = ev.dataTransfer.getData("text");
-            ev.target.appendChild(document.getElementById(data));
-        }
-        
         window.onload = function(){
             $("#menu-toggle").click(function(e) {
                 e.preventDefault();
                 $("#wrapper").toggleClass("toggled");
             });
-            
-            var cards = document.getElementsByClassName('card-img-top');
-            
         };
+            
+        var dropArea = document.getElementById('drop-area');
+        dropArea.addEventListener('dragover', dragover_handler, false);
+        dropArea.addEventListener('drop', drop_handler, false);
+        
+        var dragImgs = document.getElementsByClassName('card-img');
+        for(var i=0; i<dragImgs.length; i++){
+            dragImgs[i].addEventListener('dragstart', dragstart_handler, false);
+            dragImgs[i].addEventListener('dragend', dragend_handler, false);
+            dragImgs[i].attr('draggable', 'true');
+        }
+        function dragstart_handler(ev) {
+             console.log("dragStart");
+             // Change the source element's background color to signify drag has started
+             // Add the id of the drag source element to the drag data payload so
+             // it is available when the drop event is fired
+             ev.dataTransfer.setData("text", ev.target.id);
+             // Tell the browser both copy and move are possible
+             ev.effectAllowed = "copyMove";
+        }
+        function dragover_handler(ev) {
+             console.log("dragOver");
+             // Change the target element's border to signify a drag over event
+             // has occurred
+             ev.preventDefault();
+        }
+        function drop_handler(ev) {
+            console.log("Drop");
+            ev.preventDefault();
+              // Get the id of drag source element (that was added to the drag data
+              // payload by the dragstart event handler)
+            var id = ev.dataTransfer.getData("text");
+              // Only Move the element if the source and destination ids are both "move"
+            if (ev.target.id == "drop-area") {
+                var img = document.getElementById("style-image");
+                img.src = id;
+                img.height = "400";
+            }
+        }
+        function dragend_handler(ev) {
+              // Remove all of the drag data
+            ev.dataTransfer.clearData();
+        }
     </script>
 
     <!-- Bootstrap core JavaScript -->

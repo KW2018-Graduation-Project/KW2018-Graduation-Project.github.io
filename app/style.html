@@ -67,8 +67,10 @@
               <p class="lead text-muted">Something short and leading about the collection below—its content</p>
 
                 <div class="m-auto" id="image-div">
-                    <div id="image-area">
-                        <img class="p-2" id="style-image" src="resources/style.jpg" />
+                    <div id="drop-area">
+                    </div>
+                    <div id="back-area">
+                        <img class="p-2" id="style-image" />
                     </div>
                 </div>
               <p>
@@ -81,8 +83,9 @@
         </div>
         <!-- /#wrapper -->
 
-    <!-- Menu Toggle Script -->
+    <script src="js/readImgList.js"></script>
     <script type="text/javascript">
+//        Menu Toggle Script 
         window.onload = function(){
             $("#menu-toggle").click(function(e) {
                 e.preventDefault();
@@ -90,48 +93,47 @@
             });
         };
         
-        // call initialization file
-        if (window.File && window.FileList && window.FileReader) {
-            var filedrag = $(".drop-area");
-
-            // is XHR2 available?
-            var xhr = new XMLHttpRequest();
-            if (xhr.upload) {
-                // file drop
-                filedrag.on("dragover", hover);
-                filedrag.on("dragleave", hover);
-                filedrag.on("drop", handler);
+        var dropArea = document.getElementById('drop-area');
+        dropArea.addEventListener('dragover', dragover_handler, false);
+        dropArea.addEventListener('drop', drop_handler, false);
+        
+        var dragImgs = document.getElementsByClassName('card-img');
+        for(var i=0; i<dragImgs.length; i++){
+            dragImgs[i].addEventListener('dragstart', dragstart_handler, false);
+            dragImgs[i].addEventListener('dragend', dragend_handler, false);
+            dragImgs[i].attr('draggable', 'true');
+        }
+        function dragstart_handler(ev) {
+             console.log("dragStart");
+             // Change the source element's background color to signify drag has started
+             // Add the id of the drag source element to the drag data payload so
+             // it is available when the drop event is fired
+             ev.dataTransfer.setData("text", ev.target.id);
+             // Tell the browser both copy and move are possible
+             ev.effectAllowed = "copyMove";
+        }
+        function dragover_handler(ev) {
+             console.log("dragOver");
+             // Change the target element's border to signify a drag over event
+             // has occurred
+             ev.preventDefault();
+        }
+        function drop_handler(ev) {
+            console.log("Drop");
+            ev.preventDefault();
+              // Get the id of drag source element (that was added to the drag data
+              // payload by the dragstart event handler)
+            var id = ev.dataTransfer.getData("text");
+              // Only Move the element if the source and destination ids are both "move"
+            if (ev.target.id == "drop-area") {
+                var img = document.getElementById("style-image");
+                img.src = id;
+                img.height = "400";
             }
         }
-
-        // file drag hover
-        function hover(e) {
-            e.stopPropagation();
-            e.preventDefault();
-            if(e.type == "dragover")
-              $(e.target).addClass("hover");
-            else 
-              $(e.target).removeClass("hover");
-        }
-        // file selection
-        function handler(e) {
-            // cancel event and hover styling
-            hover(e);
-
-            // fetch FileList object
-            var files = e. originalEvent.target.files || e. originalEvent.dataTransfer.files;
-            showImage(files[0]);
-        }
-
-
-        function showImage(f) {
-          var img = $('<img>');
-          var reader = new FileReader();
-          reader.onloadend = function() {
-              img.attr('src', reader.result);
-            $('.drop-area').css('background-image', 'url('+reader.result+')').addClass("selected");
-          }
-          reader.readAsDataURL(f);
+        function dragend_handler(ev) {
+              // Remove all of the drag data
+            ev.dataTransfer.clearData();
         }
     </script>
 
