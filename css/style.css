@@ -1,0 +1,140 @@
+/*!
+ * Start Bootstrap - Simple Sidebar (https://startbootstrap.com/template-overviews/simple-sidebar)
+ * Copyright 2013-2017 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-simple-sidebar/blob/master/LICENSE)
+ */
+
+body {
+    overflow: hidden;
+}
+
+#wrapper {
+  padding-left: 0;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+#wrapper.toggled {
+  padding-left: 250px;
+}
+
+#sidebar-wrapper {
+  z-index: 1000;
+  position: fixed;
+  left: 380px;
+  width: 0;
+  height: 100%;
+  margin-left: -380px;
+  overflow-y: auto;
+  background: #333333;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+  width: 380px;
+}
+
+#page-content-wrapper {
+  width: 100%;
+  position: absolute;
+  padding: 15px;
+}
+
+#wrapper.toggled #page-content-wrapper {
+  position: absolute;
+  margin-right: -380px;
+}
+
+
+/* Sidebar Styles */
+
+.sidebar-nav {
+  position: absolute;
+  top: 0;
+  width: 380px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sidebar-nav div {
+    float: left;
+}
+
+.sidebar-nav div {
+    border: none;
+    display: block;
+}
+
+.sidebar-nav li div:hover {
+    opacity: 0.8;
+}
+
+.sidebar-nav li a:active, .sidebar-nav li a:focus {
+  text-decoration: none;
+}
+
+.sidebar-nav>.sidebar-brand {
+}
+
+@media(min-width:768px) {
+  #wrapper {
+    padding-left: 0;
+  }
+  #wrapper.toggled {
+    padding-left: 380px;
+  }
+  #sidebar-wrapper {
+    width: 0;
+  }
+  #wrapper.toggled #sidebar-wrapper {
+    width: 380px;
+  }
+  #page-content-wrapper {
+    padding: 20px;
+    position: relative;
+  }
+  #wrapper.toggled #page-content-wrapper {
+    position: relative;
+    margin-right: 0;
+  }
+}
+
+/* custom css */
+
+
+#menu-toggle{
+    width: 40px;
+    height: 60px;
+    padding: 10px 0;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    background-color: #333;
+    border: 1px solid #333;
+    margin-top: 30px;
+}
+
+#image-div{
+    width: 600px;
+    height: 400px;
+    border: 1px solid #e0e0e0;
+    background-color: #efefef;
+    border-radius: 5px;
+}
+#style-image{
+    height: 400px;
+    max-height: 400px;
+}
+.card{
+    margin: 10px;
+    width: 140px;
+    height: 140px;
+}
+.card img{
+    height: inherit;
+    min-width: 140px;
+}
