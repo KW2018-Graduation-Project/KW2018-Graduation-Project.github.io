@@ -1,0 +1,4 @@
+﻿  WatershedAlgorithm.cpp
+c:\users\yujin\documents\visual studio 2015\projects\styletransfer_imagesegmentation\styletransfer_imagesegmentation\watershedalgorithm.cpp(21): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  StyleTransfer_ImageSegmentation.vcxproj -> C:\Users\yujin\documents\visual studio 2015\Projects\StyleTransfer_ImageSegmentation\x64\Debug\StyleTransfer_ImageSegmentation.exe
+  StyleTransfer_ImageSegmentation.vcxproj -> C:\Users\yujin\documents\visual studio 2015\Projects\StyleTransfer_ImageSegmentation\x64\Debug\StyleTransfer_ImageSegmentation.pdb (Full PDB)
