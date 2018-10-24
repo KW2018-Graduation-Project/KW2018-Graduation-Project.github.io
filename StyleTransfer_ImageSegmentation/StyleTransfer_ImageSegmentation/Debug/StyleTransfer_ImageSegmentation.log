@@ -1,0 +1,11 @@
+﻿  WatershedAlgorithm.cpp
+  StyleTransfer.cpp
+  ImageProcessing.cpp
+  코드를 생성하고 있습니다...
+StyleTransfer.obj : error LNK2005: "int height" (?height@@3HA)이(가) ImageProcessing.obj에 이미 정의되어 있습니다.
+StyleTransfer.obj : error LNK2005: "int width" (?width@@3HA)이(가) ImageProcessing.obj에 이미 정의되어 있습니다.
+StyleTransfer.obj : error LNK2005: "class cv::Mat procImg" (?procImg@@3VMat@cv@@A)이(가) ImageProcessing.obj에 이미 정의되어 있습니다.
+WatershedAlgorithm.obj : error LNK2005: "int height" (?height@@3HA)이(가) ImageProcessing.obj에 이미 정의되어 있습니다.
+WatershedAlgorithm.obj : error LNK2005: "int width" (?width@@3HA)이(가) ImageProcessing.obj에 이미 정의되어 있습니다.
+WatershedAlgorithm.obj : error LNK2005: "class cv::Mat procImg" (?procImg@@3VMat@cv@@A)이(가) ImageProcessing.obj에 이미 정의되어 있습니다.
+opencv_world342d.lib(opencv_world342d.dll) : fatal error LNK1112: 'x64' 모듈 컴퓨터 종류가 'X86' 대상 컴퓨터 종류와 충돌합니다.
