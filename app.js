@@ -12,7 +12,7 @@ var content = require('./routes/content');
 var mask = require('./routes/mask');
 var guide = require('./routes/guide');
 var result = require('./routes/result');
-var progress = require('/routes/progress');
+var progress = require('./routes/progress');
 
 
 var app = express();
