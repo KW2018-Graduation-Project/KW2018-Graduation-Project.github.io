@@ -10,8 +10,8 @@ int dir_y[8] = { 0, 0, -1, 1, -1, -1, -1,1 };
 bool isBoundary(int x, int y) {
 	if (x < 0) return false;
 	if (y < 0) return false;
-	if (x > height-1) return false;
-	if (y > width-1) return false;
+	if (x > nHeight-1) return false;
+	if (y > nWidth-1) return false;
 	return true;
 }
 
@@ -52,8 +52,8 @@ void expand_otherwise(Mat& outImg, vector<PixelNode>& frontier, int x, int y, in
 
 void watershed(Mat& selectImg, Mat& outImg) {
 	vector<vector<PixelNode> > pixels(MAXPIXEL);
-	for (int h = 0; h < height; h++) {
-		for (int w = 0; w < width; w++) {
+	for (int h = 0; h < nHeight; h++) {
+		for (int w = 0; w < nWidth; w++) {
 			uchar sel_pix = selectImg.at<uchar>(h, w);
 			if (sel_pix == BLACK)		pixels[BLACK].push_back(PixelNode(h, w));
 			else if (sel_pix == WHITE)	pixels[WHITE].push_back(PixelNode(h, w));
